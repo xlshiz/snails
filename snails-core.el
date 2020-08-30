@@ -716,6 +716,7 @@ or set it with any string you want."
                (tool-bar-lines . 0)
                (menu-bar-lines . 0)
                (tab-bar-lines . 0)
+	       (name . " *snails*")
                ))))
 
     ;; Configuration frame.
