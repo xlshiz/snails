@@ -85,7 +85,7 @@
 
 ;;; Code:
 
-(defvar snails-backend-projectile-filter-number 20)
+(defvar snails-backend-projectile-filter-number 25)
 
 (defun snails-backend-projectile-project-root ()
   "Find projectile root."
@@ -97,8 +97,10 @@
   "List project files."
   (when (ignore-errors (require 'projectile))
     (let ((project-root (snails-backend-projectile-project-root)))
-      (when project-root
-        (projectile-project-files project-root)))))
+      (unless (file-equal-p (snails-start-buffer-dir) "~")
+        (if project-root
+          (projectile-project-files project-root)
+	 (counsel--find-return-list counsel-file-jump-args))))))
 
 (snails-create-sync-backend
  :name

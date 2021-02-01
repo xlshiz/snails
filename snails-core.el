@@ -776,6 +776,14 @@ or set it with any string you want."
   ;; Record window configuration first.
   (setq snails-split-window-conf (current-window-configuration))
 
+  ;; Set project directory.
+  (setq snails-project-root-dir
+        (let ((project (project-current)))
+          (when project
+            (expand-file-name (cdr project))
+            )))
+
+
   ;; Focus downest window.
   (delete-other-windows)
   (split-window)
