@@ -95,7 +95,7 @@
  :build-command
  (lambda (input)
    (when (and (executable-find "rg")
-              (> (length input) 5))
+              (> (length input) 3))
      (let ((search-dir snails-project-root-dir)
            (search-input input)
            (search-info (snails-pick-search-info-from-input input)))
@@ -124,12 +124,12 @@
             ;; Truncate search file path to make sure search content in visible area.
             (format "%s:%s"
                     (let* ((candidate-str (nth 0 candidate-items))
-                           (candidate-length (length s))
+                           (candidate-length (length candidate-str))
                            (candidate-truncate-length snails-backend-rg-candidate-truncate-length))
                       (if (<= candidate-length candidate-truncate-length)
                           candidate-str
                         (concat "..." (substring candidate-str (- candidate-length candidate-truncate-length)))))
-                    (string-join (rest candidate-items) ":"))
+                    (string-join (cdr candidate-items) ":"))
             candidate))
 
          (when (> (length candidates) snails-backend-rg-filter-number)
