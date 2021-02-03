@@ -241,7 +241,7 @@
   "The prefix/backends pair."
   :type 'cons)
 
-(defcustom snails-input-buffer-text-scale 1.25
+(defcustom snails-input-buffer-text-scale 1.1
   "The font scale of input buffer."
   :type 'float)
 
@@ -257,20 +257,24 @@
   "The minimum window height of input buffer."
   :type 'integer)
 
-(defcustom snails-tips-buffer-window-min-height 2
+(defcustom snails-tips-buffer-window-min-height 1
   "The minimum window height of tips buffer."
   :type 'integer)
+
+(defcustom snails-content-show-margin t
+  "If non nil show snails with new frame."
+  :type 'boolean)
 
 (defcustom snails-show-with-frame t
   "If non nil show snails with new frame."
   :type 'boolean)
 
 (defface snails-header-line-face
-  '((t (:inherit font-lock-function-name-face :underline t :height 1.1)))
+  '((t (:inherit font-lock-function-name-face :underline t :height 0.8)))
   "Face for header line")
 
 (defface snails-header-index-face
-  '((t (:inherit font-lock-function-name-face :underline t :height 1.1)))
+  '((t (:inherit font-lock-function-name-face :underline t :height 0.8)))
   "Face for header index")
 
 (defface snails-candiate-content-face
@@ -285,7 +289,7 @@ need to set face attribute, such as foreground and background.")
   "Face for select line.")
 
 (defface snails-input-buffer-face
-  '((t (:height 220)))
+  '((t (:height 140)))
   "Face for input area.")
 
 (defface snails-content-buffer-face
@@ -526,6 +530,29 @@ or set it with any string you want."
       (unless snails-show-with-frame
         (set-window-configuration snails-split-window-conf))
       (snails-backend-do (nth 0 candidate-info) (nth 1 candidate-info)))
+     ;; Message to user if nothing selected.
+     (t
+      (message "Nothing selected."))
+     )))
+
+(defun snails-candidate-tab ()
+  "Confirm current candidate."
+  (interactive)
+  (let ((candidate-info (snails-candidate-get-info)))
+    (cond
+     ;; Quit snails if candidate is empty string.
+     (candidate-info
+      (if (not (string= (nth 0 candidate-info) "DIRECTORY FILES"))
+          (snails-select-next-backend)
+        (let* ((candidate (nth 1 candidate-info))
+               (input-candidate (file-name-nondirectory candidate)))
+          (with-current-buffer snails-input-buffer
+            (ignore-errors
+              (search-backward-regexp "/")
+              (forward-char)
+              (kill-line))
+            (insert input-candidate))
+          )))
      ;; Message to user if nothing selected.
      (t
       (message "Nothing selected."))
@@ -989,7 +1016,8 @@ or set it with any string you want."
               (insert "\n"))
 
             ;; Insert new empty line at last candiate of backend.
-            (insert "\n"))
+            (when snails-content-show-margin
+              (insert "\n")))
           ;; Update candidate index to fetch name of next backend.
           (setq candiate-index (+ candiate-index 1))))
 
