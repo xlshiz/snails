@@ -448,6 +448,13 @@ or set it with any string you want."
     (snails-create-tips-buffer)
     (snails-create-content-buffer)
 
+    ;; Set project directory.
+    (setq snails-project-root-dir
+          (let ((project (project-current)))
+            (when project
+              (expand-file-name (cdr project))
+              )))
+
     ;; Create.
     (if snails-show-with-frame
         (snails-create-popup-window)
@@ -716,13 +723,6 @@ or set it with any string you want."
          (frame-x (+ x (/ (- width frame-width) 2)))
          (frame-y (+ y (/ (- height frame-height) 3))))
 
-    ;; Set project directory.
-    (setq snails-project-root-dir
-          (let ((project (project-current)))
-            (when project
-              (expand-file-name (cdr project))
-              )))
-
     ;; Make popup frame, and position at center of current frame.
     (unless (and
              snails-frame
@@ -802,14 +802,6 @@ or set it with any string you want."
   "Create split window."
   ;; Record window configuration first.
   (setq snails-split-window-conf (current-window-configuration))
-
-  ;; Set project directory.
-  (setq snails-project-root-dir
-        (let ((project (project-current)))
-          (when project
-            (expand-file-name (cdr project))
-            )))
-
 
   ;; Focus downest window.
   (delete-other-windows)
@@ -1511,13 +1503,6 @@ Otherwise return nil."
   (let ((pulse-iterations 1)
         (pulse-delay 0.3))
     (pulse-momentary-highlight-one-line (point) 'highlight)))
-
-(defun snails-find-file (file)
-  "This function support EAF.
-If EAF library is load, use `eaf-open' instead `find-file'."
-  (if (require 'eaf nil t)
-      (eaf-open file)
-    (find-file file)))
 
 (advice-add 'other-window
             :around

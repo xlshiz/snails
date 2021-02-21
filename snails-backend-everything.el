@@ -82,7 +82,7 @@
  :build-command
  (lambda (input)
    (when (and (executable-find "es")
-              (> (length input) 5))
+              (> (length input) 3))
      (list "es" input)))
 
  :candidate-filter
@@ -98,7 +98,7 @@
 
  :candidate-do
  (lambda (candidate)
-   (snails-find-file candidate)))
+   (find-file candidate)))
 
 (provide 'snails-backend-everything)
 

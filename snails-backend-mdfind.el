@@ -91,7 +91,7 @@
  :build-command
  (lambda (input)
    (when (and (featurep 'cocoa)
-              (> (length input) 5))
+              (> (length input) 3))
      (list "mdfind" "-name" (format "'%s'" input))))
 
  :candidate-filter
@@ -107,7 +107,7 @@
 
  :candidate-do
  (lambda (candidate)
-   (snails-find-file candidate)))
+   (find-file candidate)))
 
 (provide 'snails-backend-mdfind)
 
