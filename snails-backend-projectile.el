@@ -100,7 +100,7 @@
       (unless (file-equal-p (snails-start-buffer-dir) "~")
         (if project-root
           (projectile-project-files project-root)
-	 (counsel--find-return-list counsel-file-jump-args))))))
+          (counsel--find-return-list counsel-file-jump-args))))))
 
 (snails-create-sync-backend
  :name

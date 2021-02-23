@@ -107,16 +107,16 @@
          (setq search-dir (encode-coding-string search-dir locale-coding-system)))
 
        (list "fd"
-         ;; No print color
-         "-c" "never"
-         ;; Print absolute path
-         "-a"
-         ;; Search full path, not just filename
-         "-p"
-         ;; Search regexp
-         (mapconcat #'identity (split-string search-input) ".*")
-         ;; Search root dir
-         "--search-path" search-dir))
+             ;; No print color
+             "-c" "never"
+             ;; Print absolute path
+             "-a"
+             ;; Search full path, not just filename
+             "-p"
+             ;; Search regexp
+             (mapconcat #'identity (split-string search-input) ".*")
+             ;; Search root dir
+             "--search-path" search-dir))
      ))
 
  :candidate-filter

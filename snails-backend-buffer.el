@@ -86,19 +86,26 @@
 
 (defvar snails-backend-buffer-blacklist
   (list
-   snails-input-buffer
-   snails-content-buffer
-   " *code-conversion-work*"
-   " *Echo Area "
-   " *Minibuf-"
-   " *Custom-Work*"
-   " *pyim-page-tooltip-posframe-buffer*"
-   " *load"
-   " *server"
+   " *"
+   "*"
    ))
+
+(defvar snails-backend-buffer-whitelist
+  (list
+   "*scratch*"
+   "*Messages*"
+   ))
+
+(defun snails-backend-buffer-not-hidden-buffer (buf)
+  (if (string-prefix-p " *" (buffer-name buf))
+      nil
+    t))
 
 (defun snails-backend-buffer-not-blacklist-buffer (buf)
   (catch 'failed
+    (dolist (backlist-buf snails-backend-buffer-whitelist)
+      (when (string-prefix-p backlist-buf (buffer-name buf))
+        (throw 'failed t)))
     (dolist (backlist-buf snails-backend-buffer-blacklist)
       (when (string-prefix-p backlist-buf (buffer-name buf))
         (throw 'failed nil)))
@@ -113,7 +120,9 @@
    (let (candidates)
      (dolist (buf (buffer-list))
        (when (and
-              (snails-backend-buffer-not-blacklist-buffer buf)
+              (if (string-prefix-p " " input)
+                  (snails-backend-buffer-not-hidden-buffer buf)
+                (snails-backend-buffer-not-blacklist-buffer buf))
               (or
                (string-equal input "")
                (snails-match-input-p input (buffer-name buf))

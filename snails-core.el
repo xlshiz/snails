@@ -1474,7 +1474,7 @@ If `fuz' library not found, not sorting.
 If `fuz' not found, use normal match algorithm."
   (if (snails-fuz-library-load-p)
       (string-match-p (snails-build-fuzzy-regex input) candidate-content)
-    (string-match-p (regexp-quote input) candidate-content)))
+    (string-match-p (mapconcat #'identity (split-string input) ".*") candidate-content)))
 
 (defun snails-start-buffer-dir ()
   "Get directory of `snails-start-buffer'.

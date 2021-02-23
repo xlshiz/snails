@@ -99,7 +99,7 @@
               (string-equal input "")
               (snails-match-input-p input file))
          (snails-add-candiate 'candidates file file)))
-     (snails-sort-candidates input candidates 1 1)))
+     candidates))
 
  :candidate-icon
  (lambda (candidate)
