@@ -555,8 +555,7 @@ or set it with any string you want."
                (input-candidate (file-name-nondirectory candidate)))
           (with-current-buffer snails-input-buffer
             (ignore-errors
-              (search-backward-regexp "/")
-              (forward-char)
+              (search-backward-regexp (cl-first (last (split-string (substring (thing-at-point 'line) 1) "/"))))
               (kill-line))
             (insert input-candidate))
           )))
