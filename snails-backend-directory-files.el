@@ -106,6 +106,8 @@
               (string-equal input "")
               (snails-match-input-p input file))
          (setq filepath (concat current-directory file))
+         (if (f-directory? filepath)
+             (setq file (format "%s/" file)))
          (snails-add-candiate 'candidates file filepath)))
      (snails-sort-candidates input candidates 1 1)))
 

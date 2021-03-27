@@ -557,7 +557,9 @@ or set it with any string you want."
             (ignore-errors
               (search-backward-regexp (cl-first (last (split-string (substring (thing-at-point 'line) 1) "/"))))
               (kill-line))
-            (insert input-candidate))
+            (insert input-candidate)
+            (if (f-directory? candidate)
+                (insert "/")))
           )))
      ;; Message to user if nothing selected.
      (t
