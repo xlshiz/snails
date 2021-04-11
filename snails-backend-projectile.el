@@ -99,8 +99,7 @@
     (let ((project-root (snails-backend-projectile-project-root)))
       (unless (file-equal-p (snails-start-buffer-dir) "~")
         (if project-root
-          (projectile-project-files project-root)
-          (counsel--find-return-list counsel-file-jump-args))))))
+          (projectile-project-files project-root))))))
 
 (snails-create-sync-backend
  :name
