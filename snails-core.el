@@ -270,11 +270,11 @@
   :type 'boolean)
 
 (defface snails-header-line-face
-  '((t (:inherit font-lock-function-name-face :underline t :height 0.8)))
+  '((t (:inherit font-lock-function-name-face :underline t :height 0.6)))
   "Face for header line")
 
 (defface snails-header-index-face
-  '((t (:inherit font-lock-function-name-face :underline t :height 0.8)))
+  '((t (:inherit font-lock-function-name-face :underline t :height 0.6)))
   "Face for header index")
 
 (defface snails-candiate-content-face
@@ -293,7 +293,7 @@ need to set face attribute, such as foreground and background.")
   "Face for input area.")
 
 (defface snails-content-buffer-face
-  '((t (:height 140)))
+  '((t))
   "Face for content area.")
 
 (defface snails-tips-prefix-key-face
@@ -303,7 +303,7 @@ need to set face attribute, such as foreground and background.")
 
 (defface snails-tips-prefix-backend-face
   '((t (:inherit font-lock-comment-face
-                 :height 120)))
+                 :height 80)))
   "Face for tips backend name.")
 
 (defvar snails-init-frame nil
