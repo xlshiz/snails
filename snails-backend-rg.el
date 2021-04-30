@@ -98,11 +98,16 @@
               (> (length input) 3))
      (let ((search-dir snails-project-root-dir)
            (search-input input)
-           (search-info (snails-pick-search-info-from-input input)))
+           (search-info (snails-pick-search-info-from-input input))
+           (search-cmd (list "rg" "--no-heading" "--column" "--color" "never" "--max-columns" "300"))
+           search-param)
        ;; If the user input character includes the path separator @, replace the current directory with the entered directory.
        (when search-info
          (setq search-dir (cl-first search-info))
-         (setq search-input (cl-second search-info)))
+         (setq search-input (cl-second search-info))
+         (setq search-param (cl-third search-info))
+         (unless (string-empty-p search-param)
+           (add-to-list 'search-cmd search-param t)))
 
        (when (memq system-type '(cygwin windows-nt ms-dos))
          (setq search-input (encode-coding-string search-input locale-coding-system))
@@ -110,7 +115,8 @@
 
        ;; Search.
        (when search-dir
-         (list "rg" "--no-heading" "--column" "--color" "never" "--max-columns" "300" search-input search-dir)
+         (append search-cmd
+                 (list search-input search-dir))
          ))))
 
  :candidate-filter

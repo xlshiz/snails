@@ -96,28 +96,31 @@
               (> (length input) 3))
      (let ((search-dir (or snails-project-root-dir (snails-start-buffer-dir)))
            (search-input input)
-           (search-info (snails-pick-search-info-from-input input)))
+           (search-info (snails-pick-search-info-from-input input))
+           (search-cmd (list "fd" "-c" "never" "-a"))
+           search-param)
        ;; If the user input character includes the path separator @, replace the current directory with the entered directory.
        (when search-info
          (setq search-dir (cl-first search-info))
-         (setq search-input (cl-second search-info)))
+         (setq search-input (cl-second search-info))
+         (setq search-param (cl-third search-info))
+         (unless (string-empty-p search-param)
+           (add-to-list 'search-cmd search-param t)))
 
        (when (memq system-type '(cygwin windows-nt ms-dos))
          (setq search-input (encode-coding-string search-input locale-coding-system))
          (setq search-dir (encode-coding-string search-dir locale-coding-system)))
+       (if (string-prefix-p "." search-input)
+         (add-to-list 'search-cmd "-H" t))
 
-       (list "fd"
-             ;; No print color
-             "-c" "never"
-             ;; Print absolute path
-             "-a"
+       (append search-cmd
+         (list
              ;; Search full path, not just filename
              "-p"
              ;; Search regexp
              (mapconcat #'identity (split-string search-input) ".*")
              ;; Search root dir
-             "--search-path" search-dir))
-     ))
+             "--search-path" search-dir)))))
 
  :candidate-filter
  (lambda (candidate-list)

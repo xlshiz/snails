@@ -1486,20 +1486,34 @@ If `snails-start-buffer' is nil, get path of HOME."
     (expand-file-name "~")))
 
 (defun snails-pick-search-info-from-input (input)
-  "If nothing after @ , return HOME path and search string.
-If type soemthing after @ , split input with input-dir and search-content.
-Otherwise return nil."
+  "If nothing after @ , return current path and search string.
+If type soemthing after @ , split input with input-dir
+search-content and search-param. Otherwise return nil."
   (when (string-match-p "@" input)
-    (let (search-content input-dir)
+    (let (search-content input-dir input-param)
       (setq search-content (split-string input "@"))
       (setq input-dir (cl-second search-content))
+      (setq input-param (cl-third search-content))
       (setq-local default-directory snails-start-buffer-dir-path)
+      (if (null input-param)
+          (setq input-param ""))
+      (cond ((and (string-prefix-p "-" input-dir)
+                  (not (string-prefix-p "-" input-param)))
+             (setq input-dir input-param)
+             (setq input-param (cl-second search-content)))
+            ((and (string-prefix-p "-" input-dir)
+                  (string-prefix-p "-" input-param))
+             (setq input-param input-dir)
+             (setq input-dir ""))
+            ((and (not (string-prefix-p "-" input-dir))
+                  (not (string-prefix-p "-" input-param)))
+             (setq input-param "")))
       (cond ((equal input-dir "")
              (message "@: %s" (expand-file-name snails-start-buffer-dir-path))
-             (list (expand-file-name snails-start-buffer-dir-path) (cl-first search-content)))
+             (list (expand-file-name snails-start-buffer-dir-path) (cl-first search-content) input-param))
             ((file-exists-p input-dir)
              (message "@: %s" (expand-file-name input-dir))
-             (list (expand-file-name input-dir) (cl-first search-content)))
+             (list (expand-file-name input-dir) (cl-first search-content) input-param))
             (t nil))
       )))
 
